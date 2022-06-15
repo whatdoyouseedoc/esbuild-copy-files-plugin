@@ -5,6 +5,7 @@ Simple plugin for copy files and folders from one place to another.
 Need to copy your index.html and images in build folder? This is what you need!
 
 `source` can be `string` or `string[]`
+
 `target` can be `string` (copy in one place) or `string[]` (copy in multiple places) 
 
 Example 1 (copy with folder):
