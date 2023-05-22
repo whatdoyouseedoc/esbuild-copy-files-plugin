@@ -1,4 +1,5 @@
 # esbuild-copy-files-plugin
+https://www.npmjs.com/package/esbuild-copy-files-plugin
 An esbuild plugin that allows to easily copy files and folders across the application
 
 Simple plugin for copy files and folders from one place to another.
