@@ -1,6 +1,12 @@
 # esbuild-copy-files-plugin
 https://www.npmjs.com/package/esbuild-copy-files-plugin
+
 An esbuild plugin that allows to easily copy files and folders across the application
+
+Install:
+```
+npm i esbuild-copy-files-plugin
+```
 
 Simple plugin for copy files and folders from one place to another.
 Need to copy your index.html and images in build folder? This is what you need!
