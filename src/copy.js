@@ -6,7 +6,7 @@ import path from 'path';
  * @param {string} str - The path to check.
  * @returns {boolean} - Returns true if the path is a file.
  */
-function isPathToFile(str) {
+export function isPathToFile(str) {
     return !!path.extname(str);
 }
 
@@ -14,7 +14,7 @@ function isPathToFile(str) {
  * Ensure that the directory exists.
  * @param {string} dir - The directory to check.
  */
-function ensureDirectoryExists(dir) {
+export function ensureDirectoryExists(dir) {
     try {
         fs.accessSync(dir);
     } catch {
@@ -26,7 +26,7 @@ function ensureDirectoryExists(dir) {
  * @param {string} source - The source file path.
  * @param {string} target - The target file path.
  */
-function copyFileSync(source, target) {
+export function copyFileSync(source, target) {
     if (isPathToFile(target)) {
         const targetDir = path.dirname(target);
 
@@ -44,7 +44,7 @@ function copyFileSync(source, target) {
  * @param {string} target - The target folder path.
  * @param {boolean} copyWithFolder - Copy the folder with the folder.
  */
-function copyFolderRecursiveSync(source, target, copyWithFolder) {
+export function copyFolderRecursiveSync(source, target, copyWithFolder) {
     if (copyWithFolder) {
         const folder = path.join(target, path.basename(source));
 
@@ -77,7 +77,7 @@ function copyFolderRecursiveSync(source, target, copyWithFolder) {
  * @param {string | string[]} options.target - The target folder path.
  * @param {boolean} options.copyWithFolder - Copy the folder with the folder.
  */
-function performCopy({ source, target, copyWithFolder }) {
+export function performCopy({ source, target, copyWithFolder }) {
     if (Array.isArray(target)) {
         for (const targetItem of target) {
             performCopy({ source, target: targetItem, copyWithFolder });
@@ -102,7 +102,7 @@ function performCopy({ source, target, copyWithFolder }) {
  * @param {string | string[]} options.target - The target folder path.
  * @param {boolean} options.copyWithFolder - Copy the folder with the folder.
  */
-function copy({ source, target, copyWithFolder }) {
+export function copy({ source, target, copyWithFolder }) {
     console.log('Copying files...');
 
     if (fs.existsSync(target)) {
