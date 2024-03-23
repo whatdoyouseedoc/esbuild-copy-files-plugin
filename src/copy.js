@@ -1,47 +1,64 @@
 import fs from 'fs';
 import path from 'path';
 
-function isPathToFile(str) {
+/**
+ * Check if the path is a file.
+ * @param {string} str - The path to check.
+ * @returns {boolean} - Returns true if the path is a file.
+ */
+export function isPathToFile(str) {
     return !!path.extname(str);
 }
 
-function copyFileSync(source, target) {
+/**
+ * Ensure that the directory exists.
+ * @param {string} dir - The directory to check.
+ */
+export function ensureDirectoryExists(dir) {
+    try {
+        fs.accessSync(dir);
+    } catch {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+}
+/**
+ * Copy a file synchronously.
+ * @param {string} source - The source file path.
+ * @param {string} target - The target file path.
+ */
+export function copyFileSync(source, target) {
     if (isPathToFile(target)) {
         const targetDir = path.dirname(target);
 
-        if (!fs.existsSync(targetDir)) {
-            fs.mkdirSync(targetDir, { recursive: true });
-        }
-
+        ensureDirectoryExists(targetDir);
         fs.copyFileSync(source, target);
     } else {
-        if (!fs.existsSync(target)) {
-            fs.mkdirSync(target, { recursive: true });
-        }
-
+        ensureDirectoryExists(target);
         fs.copyFileSync(source, path.join(target, path.basename(source)));
     }
 }
 
-function copyFolderRecursiveSync(source, target, copyWithFolder) {
+/**
+ * Copy a folder recursively synchronously.
+ * @param {string} source - The source folder path.
+ * @param {string} target - The target folder path.
+ * @param {boolean} copyWithFolder - Copy the folder with the folder.
+ */
+export function copyFolderRecursiveSync(source, target, copyWithFolder) {
     if (copyWithFolder) {
         const folder = path.join(target, path.basename(source));
 
-        if (!fs.existsSync(folder)) {
-            fs.mkdirSync(folder, { recursive: true });
-        }
+        ensureDirectoryExists(folder);
 
         return copyFolderRecursiveSync(source, folder);
     }
 
-    if (!fs.existsSync(target)) {
-        fs.mkdirSync(target, { recursive: true });
-    }
+    ensureDirectoryExists(target);
 
     if (fs.lstatSync(source).isDirectory()) {
         const files = fs.readdirSync(source);
 
-        files.forEach((file) => {
+        for (const file of files) {
             const curSource = path.join(source, file);
 
             if (fs.lstatSync(curSource).isDirectory()) {
@@ -49,19 +66,26 @@ function copyFolderRecursiveSync(source, target, copyWithFolder) {
             } else {
                 copyFileSync(curSource, target);
             }
-        });
+        }
     }
 }
 
-function copy({ source, target, copyWithFolder }) {
+/**
+ * Perform the copy operation.
+ * @param {object} options - The options object.
+ * @param {string | string[]} options.source - The source folder path.
+ * @param {string | string[]} options.target - The target folder path.
+ * @param {boolean} options.copyWithFolder - Copy the folder with the folder.
+ */
+export function performCopy({ source, target, copyWithFolder }) {
     if (Array.isArray(target)) {
-        target.forEach((targetItem) => {
-            copy({ source, target: targetItem, copyWithFolder });
-        });
+        for (const targetItem of target) {
+            performCopy({ source, target: targetItem, copyWithFolder });
+        }
     } else if (Array.isArray(source) && !Array.isArray(target)) {
-        source.forEach((sourceItem) => {
-            copy({ source: sourceItem, target, copyWithFolder });
-        });
+        for (const sourceItem of source) {
+            performCopy({ source: sourceItem, target, copyWithFolder });
+        }
     } else if (fs.existsSync(source)) {
         if (fs.lstatSync(source).isFile()) {
             copyFileSync(source, target);
@@ -69,6 +93,25 @@ function copy({ source, target, copyWithFolder }) {
             copyFolderRecursiveSync(source, target, copyWithFolder);
         }
     }
+}
+
+/**
+ * Copy files synchronously.
+ * @param {object} options - The options object.
+ * @param {string | string[]} options.source - The source folder path.
+ * @param {string | string[]} options.target - The target folder path.
+ * @param {boolean} options.copyWithFolder - Copy the folder with the folder.
+ */
+export function copy({ source, target, copyWithFolder }) {
+    console.log('Copying files...');
+
+    if (fs.existsSync(target)) {
+        fs.rmSync(target, { recursive: true });
+    }
+
+    performCopy({ source, target, copyWithFolder });
+
+    console.log('Files copied.');
 }
 
 export default copy;
