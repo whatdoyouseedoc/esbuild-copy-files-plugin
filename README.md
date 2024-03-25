@@ -1,6 +1,8 @@
 ![npm statistic](https://nodei.co/npm/esbuild-copy-files-plugin.png?downloads=true&downloadRank=true&stars=true)
 
 ![NPM Downloads](https://img.shields.io/npm/d18m/esbuild-copy-files-plugin)
+![Dependents (via libraries.io)](https://img.shields.io/librariesio/dependents/npm/esbuild-copy-files-plugin)
+![Dependent repos](https://img.shields.io/badge/dynamic/json?color=success&label=used-by&query=repositories_humanize&logo=hugo&url=https://api.razonyang.com/v1/github/dependents/whatdoyouseedoc/esbuild-copy-files-plugin)
 # esbuild-copy-files-plugin
 https://www.npmjs.com/package/esbuild-copy-files-plugin
 
