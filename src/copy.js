@@ -42,9 +42,13 @@ export function copyFileSync(source, target) {
  * Copy a folder recursively synchronously.
  * @param {string} source - The source folder path.
  * @param {string} target - The target folder path.
- * @param {boolean} copyWithFolder - Copy the folder with the folder.
+ * @param {boolean} [copyWithFolder] - Copy the folder with the folder.
  */
-export function copyFolderRecursiveSync(source, target, copyWithFolder) {
+export function copyFolderRecursiveSync(
+    source,
+    target,
+    copyWithFolder = false
+) {
     if (copyWithFolder) {
         const folder = path.join(target, path.basename(source));
 
@@ -75,14 +79,14 @@ export function copyFolderRecursiveSync(source, target, copyWithFolder) {
  * @param {object} options - The options object.
  * @param {string | string[]} options.source - The source folder path.
  * @param {string | string[]} options.target - The target folder path.
- * @param {boolean} options.copyWithFolder - Copy the folder with the folder.
+ * @param {boolean} [options.copyWithFolder] - Copy the folder with the folder.
  */
 export function performCopy({ source, target, copyWithFolder }) {
     if (Array.isArray(target)) {
         for (const targetItem of target) {
             performCopy({ source, target: targetItem, copyWithFolder });
         }
-    } else if (Array.isArray(source) && !Array.isArray(target)) {
+    } else if (Array.isArray(source)) {
         for (const sourceItem of source) {
             performCopy({ source: sourceItem, target, copyWithFolder });
         }
@@ -94,19 +98,38 @@ export function performCopy({ source, target, copyWithFolder }) {
         }
     }
 }
+/**
+ * Clean the target folder.
+ * @param {string} target - The target folder path.
+ * @returns
+ */
+function cleanTarget(target) {
+    if (fs.existsSync(target)) {
+        fs.rmSync(target, { recursive: true });
+    }
+}
 
 /**
  * Copy files synchronously.
  * @param {object} options - The options object.
  * @param {string | string[]} options.source - The source folder path.
  * @param {string | string[]} options.target - The target folder path.
- * @param {boolean} options.copyWithFolder - Copy the folder with the folder.
+ * @param {boolean} [options.copyWithFolder] - Copy the folder with the folder.
+ * @param {boolean} [options.overwrite] - Overwrite the target folder.
  */
-export function copy({ source, target, copyWithFolder }) {
+export function copy({
+    source,
+    target,
+    copyWithFolder = false,
+    overwrite = false,
+}) {
     console.log('Copying files...');
 
-    if (fs.existsSync(target)) {
-        fs.rmSync(target, { recursive: true });
+    if (overwrite) {
+        console.log('Overwriting target folder...');
+        Array.isArray(target)
+            ? target.forEach(cleanTarget)
+            : cleanTarget(target);
     }
 
     performCopy({ source, target, copyWithFolder });
