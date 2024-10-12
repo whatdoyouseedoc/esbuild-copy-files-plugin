@@ -1,6 +1,6 @@
 {
     "name": "esbuild-copy-files-plugin",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "An esbuild plugin that allows to easily copy files and folders across the application",
     "keywords": [
         "esbuild",
@@ -22,7 +22,8 @@
     "homepage": "https://github.com/whatdoyouseedoc/esbuild-copy-files-plugin",
     "scripts": {
         "build": "node esbuild.config.mjs",
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
     },
     "jest": {
         "testPathIgnorePatterns": [
