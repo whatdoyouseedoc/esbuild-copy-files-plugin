@@ -103,7 +103,7 @@ export function performCopy({ source, target, copyWithFolder }) {
  * @param {string} target - The target folder path.
  * @returns
  */
-function cleanTarget(target) {
+export function cleanTarget(target) {
     if (fs.existsSync(target)) {
         fs.rmSync(target, { recursive: true });
     }
